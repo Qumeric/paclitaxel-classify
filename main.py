@@ -1,7 +1,6 @@
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.models import Sequential
-from keras.optimizers import SGD
 from loader import load_data
 from params import img_rows, img_cols, nb_classes, nb_epoch, nb_pool, batch_size, nb_conv, nb_filters
 
@@ -16,17 +15,16 @@ model.add(Activation('relu'))
 model.add(Convolution2D(nb_filters, nb_conv, nb_conv))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(nb_pool, nb_pool)))
-model.add(Dropout(0.25))
+#model.add(Dropout(0.25))
 
 model.add(Flatten())
 model.add(Dense(1024))
 model.add(Activation('relu'))
-model.add(Dropout(0.5))
+#model.add(Dropout(0.5))
 model.add(Dense(nb_classes))
 model.add(Activation('softmax'))
-sgd = SGD(lr=0.001, decay=1e-6, momentum=0.8, nesterov=True)
 model.compile(loss='categorical_crossentropy',
-              optimizer=sgd,
+              optimizer='Adam',
               metrics=['accuracy'])
 
 model.fit(X_train, Y_train, batch_size=batch_size, 
