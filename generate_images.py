@@ -8,7 +8,7 @@ from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator
 from loader import load_data
 from os import listdir, path, makedirs
-from params import augment_n, img_rows, img_cols, image_dirs, remove_bordering
+from params import img_rows, img_cols, image_dirs
 from random import randrange
 from shutil import rmtree
 from scipy.misc import imsave, imresize
@@ -18,7 +18,7 @@ data_dir = '/data'+str(img_rows)+'/'
 dna = {directory: [mh.imread(directory + '/data/' + f) for f in listdir(directory+'/data') if f[-3:] == 'tif']
         for directory in image_dirs}
 
-def process_image(im, d, test=False):
+def process_image(im, d, test = False, remove_bordering = True):
     plt.figure(1, frameon=False)
     sigma = 75
     dnaf = mh.gaussian_filter(im.astype(float), sigma)
@@ -41,7 +41,7 @@ def process_image(im, d, test=False):
 
     _, nr_objects = mh.labeled.relabel(filtered)    
     print('Removed', old_nr_objects - nr_objects, 'small regions')
-    old_nr_objects = nr_objects    
+    old_nr_objects = nr_objects
     
     if (remove_bordering):
         filtered = mh.labeled.remove_bordering(filtered)
@@ -62,7 +62,7 @@ def process_image(im, d, test=False):
             print("Cell {} average luminescence is {}".format(i, fin_result[i]))
             bbox = mh.bbox((labeled==i))
             plt.text((bbox[2]+bbox[3])/2, (bbox[0]+bbox[1])/2, str(i), fontsize=20, color='black')
-            plt.show()
+        plt.show()
     else:
         for i in range(1, nr_objects+1):
             bbox = mh.bbox((labeled==i))
@@ -81,8 +81,8 @@ def gen_cropped(im, d, cnt=100):
             hashed = uuid.uuid4().hex
             imsave(d+data_dir+hashed+'-'+str(i)+'.png', part)    
             
-def augment():
-    for i in range(augment_n):
+def augment(n = 4):
+    for i in range(n):
         for image_dir in image_dirs:
             # Dummy model
             model = Sequential()
@@ -116,7 +116,6 @@ def augment():
                                              save_to_dir=save_path,
                                              save_prefix='_'+str(i), save_format='png'),
                             samples_per_epoch=X_train.shape[0], nb_epoch=1)
-
 
 if __name__ == "__main__":
     print("Enter operation type:")
