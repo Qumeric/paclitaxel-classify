@@ -1,6 +1,7 @@
 # paclitaxel-classify
-Classificator of cells under influence of Paclitaxel (Taxol) using RNN.
-Input is a photo taken from electron microscope, output is a set probabilities of beloning the photo to each of the following classes accroding to concentration of Paclitaxel:
+Classificator of cells under influence of Paclitaxel (Taxol) using CNN.
+Input: a photo taken from electron microscope.
+Output: probability of beloning to each of the following classes accroding to concentration of Paclitaxel:
 1. Control group
 2. 0.1 mkg
 3. 1 mkg
@@ -16,7 +17,7 @@ Second semester scientific project in Saint Petersburg Academic University.
     - Flipping
     - Shifting
     - Scaling
- 4. Learning (5 layers RNN on Keras)
+ 4. Learning (5 layers CNN in Keras)
  
 ## Architecture
 input(78x78) -> conv(32x5x5) -> conv(32x5x5) -> maxpool(2x2) -> ReLU(1024) -> Softmax(4)
